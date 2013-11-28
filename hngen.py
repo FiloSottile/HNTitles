@@ -1,6 +1,3 @@
-import urllib2
-import re
-import sys
 from collections import defaultdict
 from random import random
 
@@ -8,6 +5,10 @@ from random import random
 PLEASE DO NOT RUN THIS QUOTED CODE FOR THE SAKE OF daemonology's SERVER, IT IS 
 NOT MY SERVER AND I FEEL BAD FOR ABUSING IT. JUST GET THE RESULTS OF THE 
 CRAWL HERE: http://pastebin.com/raw.php?i=nqpsnTtW AND SAVE THEM TO "archive.txt"
+
+import urllib2
+import re
+import sys
 
 archive = open("archive.txt","w")
 
@@ -58,21 +59,16 @@ def sample(items):
             next_word = k
     return next_word
 
-sentences = []
-while len(sentences) < 100:
-    sentence = []
-    next_word = sample(markov_map[''].items())
-    while next_word != '':
-        sentence.append(next_word)
-        next_word = sample(markov_map[' '.join(sentence[-lookback:])].items())
-    sentence = ' '.join(sentence)
-    flag = True
-    for title in titles: #Prune titles that are substrings of actual titles
-        if sentence in title:
-            flag = False
-            break
-    if flag:
-        sentences.append(sentence)
-
-for sentence in sentences:
-    print sentence
+def get_sentence(length_max=140):
+    while True:
+        sentence = []
+        next_word = sample(markov_map[''].items())
+        while next_word != '':
+            sentence.append(next_word)
+            next_word = sample(markov_map[' '.join(sentence[-lookback:])].items())
+        sentence = ' '.join(sentence)
+        if any(sentence in title for title in titles):
+            continue #Prune titles that are substrings of actual titles
+        if len(sentence) > length_max:
+            continue
+        return sentence
