@@ -29,7 +29,7 @@ while True:
     r = random.random()
     if r < 0.2:
         print('Draw a {:f}, publishing...'.format(r))
-        # api.update_status(status)
+        api.update_status(status)
     else:
         print('Draw a {:f}, skipping.'.format(r))
-    time.sleep(3)
+    time.sleep(3600)
